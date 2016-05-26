@@ -28,13 +28,14 @@ func main() {
 		log.Printf("Current pid is %d", pid)
 
 		f, err := os.OpenFile("pid.keep", os.O_RDWR|os.O_CREATE|os.SEEK_SET, 0777)
-
+		defer f.Close()
 		if err != nil {
 			log.Println(err)
 			return
 		}
 
 		_, err = f.Write([]byte(strconv.Itoa(pid)))
+		f.Sync()
 		if err != nil {
 			log.Println(err)
 			return
